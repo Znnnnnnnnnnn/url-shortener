@@ -28,6 +28,7 @@ It is not uncommon to see someone need to share a long and complex URL with frie
 ## Features
 
 1. use node `crypto` module to perform sha512 hmac encryption on url string, it uses a secret key to hash the url string for generating a a digital signature. output is unique and not possible to be deciphered.
+2. when user access shorten url, the web server will trigger a 307 temporary redirect using the original url. This is done in NextJS page component, with the help of its server side rendering, a 307 http response can be sent
 
 ## Tech Stack
 
