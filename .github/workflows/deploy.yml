@@ -57,10 +57,10 @@ jobs:
       - name: ssh into ec2 and rerun container
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_PUBLIC_ADDRESS }} 
-          host: ${{ secrets.EC2_USERNAME }} 
+          host: ${{ secrets.EC2_PUBLIC_ADDRESS }}
+          username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PEM_FILE }}
           script: |
             docker rm -f web_app
             docker pull $DOCKERHUB_USERNAME/$DOCKERHUB_REPONAME:$DOCKERHUB_IMAGE_TAG
-            docker run -d -p 80:3000 --name web_app $DOCKERHUB_USERNAME/$DOCKERHUB_REPONAME:$DOCKERHUB_IMAGE_TAG
+            docker run -d -p 80:3000 --restart=on-failure:10 --name=web_app $DOCKERHUB_USERNAME/$DOCKERHUB_REPONAME:$DOCKERHUB_IMAGE_TAG
