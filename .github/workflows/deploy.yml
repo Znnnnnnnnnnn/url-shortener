@@ -63,4 +63,4 @@ jobs:
           script: |
             docker rm -f web_app
             docker pull $DOCKERHUB_USERNAME/$DOCKERHUB_REPONAME:$DOCKERHUB_IMAGE_TAG
-            docker run -d -p 80:3000 --restart=on-failure:10 --name=web_app $DOCKERHUB_USERNAME/$DOCKERHUB_REPONAME:$DOCKERHUB_IMAGE_TAG
+            docker run -d -p 80:3000 --restart=on-failure:10 --name web_app $DOCKERHUB_USERNAME/$DOCKERHUB_REPONAME:$DOCKERHUB_IMAGE_TAG
