@@ -34,6 +34,42 @@ It is not uncommon to see someone need to share a long and complex URL with frie
 
 ## Setup
 
+Simply clone the project by running
+
+```
+git clone https://github.com/leonardlzn/url-shortener.git
+```
+
+Make sure you have Node(should be fine as long as its above version 14) and yarn installed in your machine, after which, install the dependencies by running
+
+```
+yarn
+```
+
+And spin up the app by running
+
+```
+yarn dev
+```
+
+Now the application can be access in `localhost:3000`
+
 ## Run Tests
+
+### Unit test
+
+There are [tests](https://github.com/leonardlzn/url-shortener/blob/main/src/utils/index.test.ts) to cover the core hashing function in this application and they can be run locally(after following the [setup](https://github.com/leonardlzn/url-shortener#setup) step) by running this in terminal
+
+```
+yarn run test:unit
+```
+
+### e2e test
+
+There is also [test](https://github.com/leonardlzn/url-shortener/blob/main/e2e/redirect.spec.ts) to simulate the browser accessing the shorten url. Run the test by typing this in terminal
+
+```
+yarn run test:e2e
+```
 
 ## Guide

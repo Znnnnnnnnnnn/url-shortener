@@ -20,6 +20,9 @@ jobs:
       - name: install dependencies
         run: yarn
 
+      - name: install playwright dependencies
+        run: yarn run playwright install
+
       - name: run unit test
         run: yarn run test:unit
 
@@ -27,6 +30,7 @@ jobs:
         run: yarn run test:e2e
 
   build-and-deploy:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
