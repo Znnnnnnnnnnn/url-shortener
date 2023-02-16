@@ -1,0 +1,47 @@
+name: test deploy to docker hub
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  DOCKERHUB_USERNAME: leonardlzn
+  DOCKERHUB_REPONAME: url-shortener
+  DOCKERHUB_IMAGE_TAG: latest
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2
+
+      - name: install dependencies
+        run: yarn
+
+      - name: run unit test
+        run: yarn run test:unit
+
+      - name: run unit e2e test
+        run: yarn run test:e2e
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v2
+
+      - name: login docker hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and tag Docker image
+        run: |
+          docker build -t $DOCKERHUB_USERNAME/$DOCKERHUB_REPONAME:$DOCKERHUB_IMAGE_TAG .
+
+      - name: Push Docker image to Docker Hub
+        run: |
+          docker push $DOCKERHUB_USERNAME/$DOCKERHUB_REPONAME:$DOCKERHUB_IMAGE_TAG
