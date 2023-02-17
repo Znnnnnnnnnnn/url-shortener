@@ -16,7 +16,7 @@
     <li><a href="#setup">Setup</a></li>
     <li><a href="#run-tests">Run Tests</a></li>
     <li><a href="#cicd">CICD</a></li>
-    <li><a href="#guide">Guide</a></li>
+    <li><a href="#user-guide">User Guide</a></li>
   </ol>
 </details>
 
@@ -28,10 +28,14 @@ It is not uncommon to see someone need to share a long and complex URL with frie
 
 ## Features
 
-1. use node `crypto` module to perform sha512 hmac encryption on url string, it uses a secret key to hash the url string for generating a a digital signature. output is unique and not possible to be deciphered.
-2. when user access shorten url, the web server will trigger a 307 temporary redirect using the original url. This is done in NextJS page component, with the help of its server side rendering, a 307 http response can be sent
+1. use [short-uuid](https://github.com/oculus42/short-uuid) npm package to create a 6 charater-long case sensitive alphanumic string. It is used to map url only when databse record shows that the generated UUID has not been used before.
+2. when users access shorten url, the web server will trigger a 307 temporary redirect using the original url. This is done in NextJS page component, with the help of its server side rendering, a 307 http response can be sent.
+
+<br />
 
 ## Tech Stack
+
+<br />
 
 ## Setup
 
@@ -55,11 +59,13 @@ yarn dev
 
 Now the application can be access in `localhost:3000`
 
+<br />
+
 ## Run Tests
 
 ### Unit test
 
-There are [tests](https://github.com/leonardlzn/url-shortener/blob/main/src/utils/index.test.ts) to cover the core hashing function in this application and they can be run locally(after following the [setup](https://github.com/leonardlzn/url-shortener#setup) step) by running this in terminal
+There are [tests](https://github.com/leonardlzn/url-shortener/blob/main/src/utils/index.test.ts) to cover the requirements on the uuid generation function and they can be run locally(after following the [setup](https://github.com/leonardlzn/url-shortener#setup) step) by running this in terminal
 
 ```
 yarn run test:unit
@@ -72,6 +78,8 @@ There is also [test](https://github.com/leonardlzn/url-shortener/blob/main/e2e/r
 ```
 yarn run test:e2e
 ```
+
+<br />
 
 ## CICD
 
@@ -93,4 +101,4 @@ There are mainly three stages in the pipeline
 
 NOTE: _This pipeline is triggered whenever there is new commit pushed to **main** branch_
 
-## Guide
+## User Guide
