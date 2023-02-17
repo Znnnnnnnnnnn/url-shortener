@@ -3,4 +3,4 @@ CREATE TABLE IF NOT EXISTS url (
   url TEXT NOT NULL UNIQUE
 );
 
-INSERT INTO url (uuid, url) VALUES ('www.google.com');
+INSERT INTO url (uuid, url) VALUES ('someuuid', 'www.google.com');
