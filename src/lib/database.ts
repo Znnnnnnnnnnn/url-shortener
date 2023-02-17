@@ -1,6 +1,11 @@
 import { Database } from "sqlite3";
 import { generateUUID } from "./utils";
 
+export type Url = {
+  uuid: string;
+  url: string;
+};
+
 /**
  * get sqlite DB instance
  */
@@ -16,7 +21,7 @@ export const getDB = async () => {
 /**
  * get all url wrapper sql fn
  */
-export const findAllUrl = async () => {
+export const findAllUrl = async (): Promise<Url[]> => {
   const db = await getDB();
 
   return new Promise((resolve, reject) => {

@@ -1,6 +1,6 @@
-import { findAllUrl } from "~/lib";
+import { findAllUrl, Url } from "~/lib";
 
-export default function Home({ urls }) {
+export default function Home({ urls }: { urls: Url[] }) {
   return (
     <>
       <ul>
@@ -15,7 +15,7 @@ export default function Home({ urls }) {
 }
 
 export const getServerSideProps = async () => {
-  let urls = [];
+  let urls: Url[] = [];
   try {
     urls = await findAllUrl();
   } catch (error) {
