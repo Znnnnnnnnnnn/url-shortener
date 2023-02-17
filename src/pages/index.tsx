@@ -3,6 +3,8 @@ import Image from "next/image";
 import { Inter } from "@next/font/google";
 import styles from "~/styles/Home.module.css";
 
+import { findAllUrl, addUrl, deleteUrl } from "~/lib";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
@@ -118,3 +120,20 @@ export default function Home() {
     </>
   );
 }
+
+export const getServerSideProps = async () => {
+  try {
+    let data;
+    // console.log(await findAllUrl());
+    console.log("deleted url ", await deleteUrl("63YKujss"));
+    // console.log(await findAllUrl());
+    // console.log("added url ", await addUrl("asddd.com"));
+    // console.log(await findAllUrl());
+  } catch (error) {
+    console.log(error);
+  }
+
+  return {
+    props: {}
+  };
+};

@@ -1,4 +1,4 @@
-import { generateUUID } from ".";
+import { generateUUID } from "./utils";
 
 describe("generate uuid for url", () => {
   it("output string should be case sensitive alphanumeric", () => {
