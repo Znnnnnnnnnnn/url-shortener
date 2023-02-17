@@ -1,12 +1,13 @@
 import { findAllUrl } from "~/lib";
 
-
 export default function Home({ urls }) {
   return (
     <>
-     <ul>
+      <ul>
         {urls.map((u) => (
-          <li key={u.uuid}>{u.uuid} -> {u.url}</li>
+          <li key={u.uuid}>
+            {u.uuid} - {u.url}
+          </li>
         ))}
       </ul>
     </>
@@ -14,9 +15,9 @@ export default function Home({ urls }) {
 }
 
 export const getServerSideProps = async () => {
-  let urls = []
+  let urls = [];
   try {
-    urls = await findAllUrl()
+    urls = await findAllUrl();
   } catch (error) {
     console.log(error);
   }
