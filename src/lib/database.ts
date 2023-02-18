@@ -14,7 +14,14 @@ export type Url = {
 export const getDB = async () => {
   try {
     // sqlite3 db directory
-    const dbPath = path.resolve(__dirname, "..", "..", "..", "database.sqlite");
+    const dbPath = path.resolve(
+      __dirname,
+      "..",
+      "..",
+      "..",
+      "db",
+      "database.sqlite"
+    );
 
     return new Database(dbPath);
   } catch (error) {

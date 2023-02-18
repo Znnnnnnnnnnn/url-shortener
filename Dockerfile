@@ -18,7 +18,8 @@ RUN yarn build
 
 # init sqlite
 RUN apk add --no-cache sqlite
-RUN sqlite3 -batch /app/database.sqlite < /app/init.sql
+RUN mkdir db
+RUN sqlite3 -batch /app/db/database.sqlite < /app/init.sql
 
 
 FROM base AS runner
