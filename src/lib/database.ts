@@ -1,4 +1,6 @@
+import path from "path";
 import { Database } from "sqlite3";
+
 import { generateUUID } from "./utils";
 
 export type Url = {
@@ -11,7 +13,10 @@ export type Url = {
  */
 export const getDB = async () => {
   try {
-    return new Database("./database.sqlite");
+    // sqlite3 db directory
+    const dbPath = path.resolve(__dirname, "..", "..", "..", "database.sqlite");
+
+    return new Database(dbPath);
   } catch (error) {
     console.log("Failed to connect to DB");
     throw error;
