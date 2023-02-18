@@ -15,8 +15,8 @@ export const getDB = async () => {
   try {
     // sqlite3 db directory
     const dbPath =
-      process.env.NODE_ENV === "production"
-        ? "/app/db/database.sqlite"
+      process.env.NODE_ENV === "development"
+        ? path.resolve(__dirname, "..", "..", "..", "test.sqlite")
         : path.resolve(__dirname, "..", "..", "..", "db", "database.sqlite");
     console.log(dbPath);
 
