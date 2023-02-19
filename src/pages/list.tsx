@@ -21,7 +21,7 @@ import {
 } from "@chakra-ui/react";
 
 import { UrlForm } from "~/components";
-import { findAllUrl, addUrl } from "~/lib";
+import { findAllUrl } from "~/lib";
 import { Url } from "~/types";
 
 interface IList {

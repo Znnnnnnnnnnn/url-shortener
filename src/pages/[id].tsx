@@ -1,25 +1,31 @@
 import { GetServerSideProps } from "next";
 
+import { findSingleUrl } from "~/lib";
+
 export default function UrlRedirect() {
   // not necessary, but need to return something
   return <div>redirecting...</div>;
 }
 
-// TODO: retrieve real url from DB
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  query,
+  res
+}) => {
   const { id } = query;
 
-  const DUMMY_REDIRECT = "https://www.google.com";
+  try {
+    const { url } = await findSingleUrl(String(id));
+    // FIXME: when url has no http protocol, its an internal redirect
+    res.writeHead(307, { Location: url });
+    res.end();
 
-  if (id)
+    return { props: {} };
+  } catch {
     return {
+      props: {},
       redirect: {
-        permanent: false,
-        destination: DUMMY_REDIRECT
+        destination: "/list"
       }
     };
-
-  return {
-    props: {}
-  };
+  }
 };
