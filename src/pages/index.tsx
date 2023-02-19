@@ -1,4 +1,5 @@
-import { findAllUrl, Url } from "~/lib";
+import { findAllUrl } from "~/lib";
+import { Url } from "~/types";
 
 export default function Home({ urls }: { urls: Url[] }) {
   return (
