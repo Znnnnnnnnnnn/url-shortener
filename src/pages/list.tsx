@@ -1,4 +1,5 @@
 import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 import {
   Table,
   Thead,
@@ -6,10 +7,12 @@ import {
   Tr,
   Th,
   Td,
-  TableContainer
+  TableContainer,
+  Button
 } from "@chakra-ui/react";
 
-import { findAllUrl, Url } from "~/lib";
+import { findAllUrl, addUrl } from "~/lib";
+import { Url } from "~/types";
 
 interface IList {
   urls: Url[];
@@ -17,8 +20,26 @@ interface IList {
 }
 
 export default function List({ urls }: IList) {
+  const router = useRouter();
+
+  const handleUrlSubmit = async () => {
+    fetch("/api/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        url: "baidus.com"
+      })
+    })
+      .then(router.reload)
+      .catch((error) => console.error(error));
+  };
   return (
     <>
+      <Button colorScheme="teal" size="lg" onClick={handleUrlSubmit}>
+        Button
+      </Button>
       <TableContainer>
         <Table variant="striped" colorScheme="gray">
           <Thead>
@@ -28,7 +49,7 @@ export default function List({ urls }: IList) {
             </Tr>
           </Thead>
           <Tbody>
-            {urls.map(({ uuid, url }) => (
+            {urls.reverse().map(({ uuid, url }) => (
               <Tr key={uuid}>
                 <Td>{uuid}</Td>
                 <Td>{url}</Td>
@@ -47,7 +68,11 @@ export const getServerSideProps: GetServerSideProps = async () => {
   try {
     urls = await findAllUrl();
   } catch (error) {
-    error = "Failed to fetch list of url";
+    if (error instanceof Error) {
+      error = error?.message;
+    } else {
+      error = "Failed to fetch list of url";
+    }
   }
 
   return {

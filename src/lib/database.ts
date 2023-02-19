@@ -60,7 +60,7 @@ export const addUrl = async (url: string, uuid = generateUUID()) => {
       [uuid, url],
       function (error) {
         if (error) {
-          reject(false);
+          reject(error);
         } else {
           resolve(true);
         }
