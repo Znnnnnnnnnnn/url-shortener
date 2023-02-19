@@ -1,11 +1,17 @@
 import path from "path";
 import { Database } from "sqlite3";
 
+import { Url } from "~/types";
 import { generateUUID } from "./utils";
 
-export type Url = {
-  uuid: string;
-  url: string;
+/**
+ * get sqlite DB file path
+ */
+const getDBPath = () => {
+  const isDev = process.env.NODE_ENV === "development";
+  const fileName = isDev ? "dev.sqlite" : "database.sqlite";
+
+  return path.join(process.cwd(), "db", fileName);
 };
 
 /**
@@ -13,12 +19,7 @@ export type Url = {
  */
 export const getDB = async () => {
   try {
-    // sqlite3 db directory
-    const dbPath =
-      process.env.NODE_ENV === "development"
-        ? path.resolve(__dirname, "..", "..", "..", "test.sqlite")
-        : path.resolve(__dirname, "..", "..", "..", "db", "database.sqlite");
-    console.log(dbPath);
+    const dbPath = getDBPath();
 
     return new Database(dbPath);
   } catch (error) {

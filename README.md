@@ -16,6 +16,7 @@
     <li><a href="#setup">Setup</a></li>
     <li><a href="#run-tests">Run Tests</a></li>
     <li><a href="#cicd">CICD</a></li>
+    <li><a href="#database">Database</a></li>
     <li><a href="#user-guide">User Guide</a></li>
   </ol>
 </details>
@@ -100,5 +101,18 @@ There are mainly three stages in the pipeline
 <br />
 
 NOTE: _This pipeline is triggered whenever there is new commit pushed to **main** branch_
+
+<br />
+
+## Database
+
+Mainly three components
+
+1. sqlite DB
+2. docker volume
+
+As a lightweight database, sqlite3 serve this application well by providing persistence to the data submitted by the user. However, in the CICD pipeline a new database(sqlite db file) is created in the docker image everytime when there is a deployment, which defeat the purpose of using database. Hence, docker volume is used to persist the database to the host level, so that even when container is recreated, the same DB file can be used
+
+<br />
 
 ## User Guide
