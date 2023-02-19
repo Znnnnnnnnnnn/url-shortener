@@ -1,5 +1,5 @@
 import path from "path";
-import { Database } from "sqlite3";
+import { Database, OPEN_READWRITE } from "sqlite3";
 
 import { Url } from "~/types";
 import { generateUUID } from "./utils";
@@ -21,7 +21,7 @@ export const getDB = async () => {
   try {
     const dbPath = getDBPath();
 
-    return new Database(dbPath);
+    return new Database(dbPath, OPEN_READWRITE);
   } catch (err) {
     console.log("Failed to connect to DB");
     throw err;

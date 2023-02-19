@@ -11,8 +11,7 @@ export default async function handler(
     let errString = "Failed to add new url";
 
     try {
-      const url = data?.url;
-      await addUrl(url);
+      await addUrl(data?.url);
       return res.status(200).json({ message: "Successfully added new url" });
     } catch (error) {
       const e = error as SqliteError;
