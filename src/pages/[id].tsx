@@ -15,8 +15,12 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   try {
     const { url } = await findSingleUrl(String(id));
-    // FIXME: when url has no http protocol, its an internal redirect
-    res.writeHead(307, { Location: url });
+
+    const location =
+      url.startsWith("https://") || url.startsWith("http://")
+        ? url
+        : `http://${url}`;
+    res.writeHead(307, { Location: location });
     res.end();
 
     return { props: {} };
