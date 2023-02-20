@@ -1,4 +1,5 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { DeleteIcon, CopyIcon } from "@chakra-ui/icons";
@@ -22,7 +23,7 @@ import {
 } from "@chakra-ui/react";
 
 import { UrlForm } from "~/components";
-import { findAllUrl, deleteUrl } from "~/lib";
+import { findAllUrl } from "~/lib";
 import { Url } from "~/types";
 
 interface IList {
@@ -30,10 +31,9 @@ interface IList {
   error: string;
 }
 
-export default function List({ urls }: IList) {
+export default function List({ urls, error }: IList) {
   const router = useRouter();
   const [url, setUrl] = useState("");
-  const [error, setError] = useState("");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [deleteUrl, setDeleteUrl] = useState<Url | undefined>();
 
@@ -48,12 +48,16 @@ export default function List({ urls }: IList) {
       })
     })
       .then((res) => {
-        if (res.ok) return router.reload();
+        if (res.ok) {
+          toast.success("Successfully added URL");
+          return router.reload();
+        }
 
         return res.json();
       })
-      .then((data) => setError(data.message))
-      .catch(() => setError("Failed to add url"));
+      .then((data) => {
+        if (data?.message) toast.error(data.message);
+      });
   };
 
   const handleDeleteSubmit = async () => {
@@ -69,12 +73,16 @@ export default function List({ urls }: IList) {
       })
     })
       .then((res) => {
-        if (res.ok) return router.reload();
+        if (res.ok) {
+          toast.success("Successfully deleted URL");
+          return router.reload();
+        }
 
         return res.json();
       })
-      .then((data) => setError(data.message))
-      .catch(() => setError("Failed to delete url"));
+      .then((data) => {
+        if (data?.message) toast.error(data.message);
+      });
   };
 
   const handleCreateModalOpen = () => setIsCreateModalOpen(true);
@@ -86,19 +94,17 @@ export default function List({ urls }: IList) {
   const onUrlChange = (e: ChangeEvent<HTMLInputElement>) =>
     setUrl(e.target.value);
 
+  useEffect(() => {
+    error && toast.error(error);
+  }, [error]);
+
   return (
     <>
       <Flex p={8} direction="column" alignItems="flex-end">
         <Button colorScheme="teal" onClick={handleCreateModalOpen}>
           Create
         </Button>
-        <TableContainer
-          width={"100%"}
-          p={4}
-          mt={4}
-          border="1px"
-          borderRadius={16}
-        >
+        <TableContainer width={"100%"} mt={4} border="1px" borderRadius={16}>
           <Table variant="striped" colorScheme="gray">
             <Thead>
               <Tr>
@@ -110,18 +116,23 @@ export default function List({ urls }: IList) {
             <Tbody>
               {urls.reverse().map(({ uuid, url }) => (
                 <Tr key={uuid}>
-                  <Td>{uuid}</Td>
                   <Td>
                     <CopyIcon
-                      onClick={() => navigator.clipboard.writeText(url)}
+                      onClick={() => {
+                        toast.success("Copied the shortened URL");
+                        navigator.clipboard.writeText(
+                          `${window.location.host}/${uuid}`
+                        );
+                      }}
                       w={4}
                       h={4}
                       mr={1}
                       mb={1}
                       _hover={{ color: "gray.500", cursor: "pointer" }}
                     />
-                    {url}
+                    {uuid}
                   </Td>
+                  <Td>{url}</Td>
                   <Td>
                     <DeleteIcon
                       onClick={() => handleDeleteModalOpen({ uuid, url })}
