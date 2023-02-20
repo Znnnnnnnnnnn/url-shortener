@@ -35,7 +35,7 @@ export const findAllUrl = async () => {
   const db = await getDB();
 
   return new Promise((resolve, reject) => {
-    db.all("SELECT * FROM url", (err, rows) => {
+    db.all("SELECT * FROM url ORDER BY created_at DESC", (err, rows) => {
       if (err) {
         reject(err);
       } else {

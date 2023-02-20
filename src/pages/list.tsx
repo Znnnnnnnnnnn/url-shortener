@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useMemo, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
@@ -36,6 +36,7 @@ export default function List({ urls, error }: IList) {
   const [url, setUrl] = useState("");
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [deleteUrl, setDeleteUrl] = useState<Url | undefined>();
+  const renderUrls = useMemo(() => urls, []);
 
   const handleCreateSubmit = async () => {
     fetch("/api/create", {
@@ -98,6 +99,14 @@ export default function List({ urls, error }: IList) {
     error && toast.error(error);
   }, [error]);
 
+  useEffect(() => {
+    // onmount check clipboiard write perm
+    navigator.permissions.query({
+      name: "clipboard-write",
+      allowWithoutGesture: false
+    });
+  });
+
   return (
     <>
       <Flex p={8} direction="column" alignItems="flex-end">
@@ -114,7 +123,7 @@ export default function List({ urls, error }: IList) {
               </Tr>
             </Thead>
             <Tbody>
-              {urls.reverse().map(({ uuid, url }) => (
+              {renderUrls.map(({ uuid, url }) => (
                 <Tr key={uuid}>
                   <Td>
                     <CopyIcon
