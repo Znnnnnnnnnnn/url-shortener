@@ -101,11 +101,17 @@ export default function List({ urls, error }: IList) {
 
   useEffect(() => {
     // onmount check clipboiard write perm
-    navigator.permissions.query({
-      name: "clipboard-write",
-      allowWithoutGesture: false
-    });
-  });
+    if ("clipboard" in navigator) {
+      const permissionName = "clipboard-write" as PermissionName;
+      navigator.permissions
+        .query({ name: permissionName })
+        .then((permissionStatus) => {
+          if (permissionStatus.state === "prompt") {
+            (navigator.permissions as any).request({ name: permissionName });
+          }
+        });
+    }
+  }, []);
 
   return (
     <>
