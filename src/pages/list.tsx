@@ -4,6 +4,7 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { DeleteIcon, CopyIcon } from "@chakra-ui/icons";
 import {
+  Heading,
   Flex,
   Button,
   Table,
@@ -34,11 +35,14 @@ interface IList {
 export default function List({ urls, error }: IList) {
   const router = useRouter();
   const [url, setUrl] = useState("");
+  const [loading, setLoading] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [deleteUrl, setDeleteUrl] = useState<Url | undefined>();
   const renderUrls = useMemo(() => urls, []);
 
   const handleCreateSubmit = async () => {
+    setLoading(true);
+
     fetch("/api/create", {
       method: "POST",
       headers: {
@@ -58,11 +62,13 @@ export default function List({ urls, error }: IList) {
       })
       .then((data) => {
         if (data?.message) toast.error(data.message);
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   const handleDeleteSubmit = async () => {
     if (!deleteUrl) return;
+    setLoading(true);
 
     fetch("/api/delete", {
       method: "POST",
@@ -83,7 +89,8 @@ export default function List({ urls, error }: IList) {
       })
       .then((data) => {
         if (data?.message) toast.error(data.message);
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   const handleCreateModalOpen = () => setIsCreateModalOpen(true);
@@ -95,30 +102,32 @@ export default function List({ urls, error }: IList) {
   const onUrlChange = (e: ChangeEvent<HTMLInputElement>) =>
     setUrl(e.target.value);
 
+  const handleCopy = (text: string) => {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  };
+
   useEffect(() => {
     error && toast.error(error);
   }, [error]);
 
-  useEffect(() => {
-    // onmount check clipboiard write perm
-    if ("clipboard" in navigator) {
-      const permissionName = "clipboard-write" as PermissionName;
-      navigator.permissions
-        .query({ name: permissionName })
-        .then((permissionStatus) => {
-          if (permissionStatus.state === "prompt") {
-            (navigator.permissions as any).request({ name: permissionName });
-          }
-        });
-    }
-  }, []);
-
   return (
     <>
-      <Flex p={8} direction="column" alignItems="flex-end">
-        <Button colorScheme="teal" onClick={handleCreateModalOpen}>
-          Create
-        </Button>
+      <Flex p={6} direction="column" alignItems="flex-end">
+        <Flex justifyContent="space-between" width="100%">
+          <Heading as="h3" size="md">
+            URL Shortener
+          </Heading>
+          <Button colorScheme="teal" onClick={handleCreateModalOpen}>
+            Create
+          </Button>
+        </Flex>
+
         <TableContainer width={"100%"} mt={4} border="1px" borderRadius={16}>
           <Table variant="striped" colorScheme="gray">
             <Thead>
@@ -135,9 +144,7 @@ export default function List({ urls, error }: IList) {
                     <CopyIcon
                       onClick={() => {
                         toast.success("Copied the shortened URL");
-                        navigator.clipboard.writeText(
-                          `${window.location.host}/${uuid}`
-                        );
+                        handleCopy(`${window.location.host}/${uuid}`);
                       }}
                       w={4}
                       h={4}
@@ -177,7 +184,12 @@ export default function List({ urls, error }: IList) {
             <Button variant={"outline"} mr={3} onClick={handleCreateModalClose}>
               Close
             </Button>
-            <Button colorScheme="teal" onClick={handleCreateSubmit}>
+            <Button
+              colorScheme="teal"
+              onClick={handleCreateSubmit}
+              isLoading={loading}
+              disabled={loading}
+            >
               Submit
             </Button>
           </ModalFooter>
@@ -199,7 +211,12 @@ export default function List({ urls, error }: IList) {
             <Button variant={"outline"} mr={3} onClick={handleDeleteModalClose}>
               Cancel
             </Button>
-            <Button colorScheme="teal" onClick={handleDeleteSubmit}>
+            <Button
+              colorScheme="teal"
+              onClick={handleDeleteSubmit}
+              isLoading={loading}
+              disabled={loading}
+            >
               Confirm
             </Button>
           </ModalFooter>
