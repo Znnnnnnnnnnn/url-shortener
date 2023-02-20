@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS url (
   uuid TEXT PRIMARY KEY UNIQUE,
-  url TEXT NOT NULL UNIQUE
+  url TEXT NOT NULL UNIQUE,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO url (uuid, url) VALUES ('someuuid', 'www.google.com');
+INSERT INTO url (uuid, url) VALUES ('newuuid', 'www.baidu.com');
