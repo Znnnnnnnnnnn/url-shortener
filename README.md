@@ -132,9 +132,10 @@ As a lightweight database, sqlite3 serve this application well by providing pers
 
 1. Make use of memory caching (e.g. redis) to cache the access of original url to reduce the lookup to database.
 2. UUID duplication check on every new url adding request
-3. Separate redirecting and dashboard services
-4. Authentiation and authorisation
-5. Logging and monitoring
-6. Load balancing on the the shortened URL access'
-7. Handle hot reload
-8. Blue green deployment
+3. URL format validation
+4. Separate redirecting and dashboard services
+5. Authentiation and authorisation
+6. Logging and monitoring
+7. Load balancing on the the shortened URL access'
+8. Handle hot reload
+9. Blue green deployment
